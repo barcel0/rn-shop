@@ -13,7 +13,7 @@ const CartScreen = props => {
   const totalSum = cartItems.reduce((acc, currentVal) => {
     return acc + +currentVal.price
   }, 0).toFixed(2);
-  const userId = useSelector(state => state.shop.userId);
+  const userId = useSelector(state => state.auth.userId);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -42,14 +42,6 @@ const CartScreen = props => {
       </View>
     }
 
-    if (orderPlaced) {
-      return (
-        <View>
-          <Text>Thanks for your oder!</Text>
-        </View>
-      );
-    }
-
     return (
       <ButtonMain
         onTap={() => placeOrderHandler()}>
@@ -67,41 +59,62 @@ const CartScreen = props => {
   if (cartItemIds.length < 1) {
     return (
       <View style={styles.screen}>
-        <Text>Your Cart is empty!</Text>
-        <Text>Try going back and adding some items.</Text>
+        <Text style={{ fontSize: 20 }}>Your Cart is empty!</Text>
+        <Text style={{ fontSize: 16 }}>Try going back and adding some items.</Text>
       </View>
     );
-  } else {
+  }
+
+  if (orderPlaced) {
     return (
       <View style={styles.screen}>
-        <View style={styles.totalSumRow}>
-          <Text>Total:</Text>
-          <Text>£{totalSum}</Text>
-        </View>
-        <Text>Items on Cart:</Text>
+        <Text style={{ fontSize: 20 }}>Order placed. Thanks!</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.screen}>
+      <View style={{ ...styles.container, ...styles.totalSumRow }}>
+        <Text style={styles.title}>Total:</Text>
+        <Text style={styles.title}>£{totalSum}</Text>
+      </View>
+      <View style={styles.container}>
+        <Text style={styles.title}>Items on Cart</Text>
         <FlatList
           data={cartItems}
           renderItem={serveCartItem}
           keyExtractor={item => item.id}
         />
-        {servePlaceOrderButton()}
-        <ButtonMain onTap={() => handleClearCart()}>
-          <Text>Clear Cart</Text>
-        </ButtonMain>
       </View>
-    );
-  }
+      {servePlaceOrderButton()}
+      <ButtonMain onTap={() => handleClearCart()} style={{ backgroundColor: 'red' }}>
+        <Text>Clear Cart</Text>
+      </ButtonMain>
+    </View>
+  );
+
 }
 
 const styles = StyleSheet.create({
   screen: {
-    // flex: 1,
+    flex: 1,
     padding: 20
+  },
+  container: {
+    padding: 20,
+    marginTop: 10,
+    elevation: 1,
+    borderRadius: 8,
+  },
+  title: {
+    fontFamily: 'open-sans-bold',
+    fontSize: 18
   },
   totalSumRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
-  }
+    justifyContent: 'space-between',
+  },
 });
 
 export default CartScreen;

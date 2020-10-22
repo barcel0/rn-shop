@@ -10,8 +10,7 @@ import { Colours } from '../constants/Colours';
 const OrdersScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const userId = useSelector(state => state.shop.userId);
-  const userOrders = useSelector(state => state.shop.orders.filter(order => order.ownerId === userId));
+  const userOrders = useSelector(state => state.shop.orders);
 
   const loadOrders = useCallback(async () => {
     setIsLoading(true);
@@ -20,7 +19,7 @@ const OrdersScreen = props => {
   }, [setIsLoading, dispatch]);
 
   useEffect(() => {
-    loadOrders
+    loadOrders();
   }, [loadOrders]);
 
   const serveOrderCard = orderData => {
@@ -42,12 +41,18 @@ const OrdersScreen = props => {
     );
   }
 
+  if (userOrders.length < 1) {
+    <View style={styles.screen}>
+      <Text>No orders found. Try placing a new one through the shop.</Text>
+    </View>
+  }
+
   return (
     <View style={styles.screen}>
       <FlatList
         data={userOrders}
         renderItem={serveOrderCard}
-        keyExtractor={(item, index) => item.id}
+        keyExtractor={item => item.date.toString()}
       />
     </View>
   );

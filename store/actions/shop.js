@@ -25,7 +25,7 @@ export const fetchItems = () => async dispatch => {
 
 export const fetchOrders = () => async (dispatch, getState) => {
   const token = getState().auth.token;
-  const userId = getState().shop.userId;
+  const userId = getState().auth.userId;
   try {
     const response = await fetch(`${FIREBASE}/orders/${userId}.json?auth=${token}`);
     if (!response.ok) throw new Error('Something went wrong fetching orders');
@@ -54,7 +54,7 @@ export const clearCart = () => {
 
 export const placeOrder = orderObject => async (dispatch, getState) => {
   const token = getState().auth.token;
-  const userId = getState().shop.userId;
+  const userId = getState().auth.userId;
   const response = await fetch(`${FIREBASE}/orders/${userId}.json?auth=${token}`, {
     method: 'POST',
     headers: {
@@ -63,7 +63,6 @@ export const placeOrder = orderObject => async (dispatch, getState) => {
     body: JSON.stringify(orderObject)
   });
   const resData = response.json();
-
   dispatch({ type: PLACE_ORDER, payload: { ...orderObject, id: resData.name } });
 }
 

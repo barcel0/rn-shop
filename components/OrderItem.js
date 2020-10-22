@@ -13,9 +13,12 @@ const OrderItem = props => {
 const styles = StyleSheet.create({
   orderItem: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     paddingVertical: 8,
-    width: '100%'
+    width: '100%',
+    borderBottomColor: 'lightgrey',
+    borderBottomWidth: 1
+
   }
 });
 

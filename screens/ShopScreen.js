@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Button } from 'react-native';
-import { set } from 'react-native-reanimated';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 import ButtonHeaderCustom from '../components/ButtonHeaderCustom';
@@ -10,6 +9,7 @@ import { fetchItems } from '../store/actions/shop';
 
 const ShopScreen = props => {
   const availableItems = useSelector(state => state.shop.items);
+  const cartItemIds = useSelector(state => state.shop.cartItemIds);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -42,6 +42,7 @@ const ShopScreen = props => {
   }, [loadItems]);
 
   const serveItemCard = (itemData) => {
+    let isItemInCart = cartItemIds.includes(itemData.item.id);
     return (
       <ItemCard
         id={itemData.item.id}
@@ -50,6 +51,7 @@ const ShopScreen = props => {
         title={itemData.item.title}
         description={itemData.item.description}
         price={itemData.item.price}
+        isItemInCart={isItemInCart}
         onSelect={() => {
           props.navigation.navigate({
             routeName: 'Detail',

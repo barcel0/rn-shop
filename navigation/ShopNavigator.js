@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Button, StyleSheet } from 'react-native';
+import { SafeAreaView, View, Button } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator, DrawerNavigatorItems } from 'react-navigation-drawer';
@@ -81,17 +81,23 @@ const AuthNavigator = createStackNavigator(
 const MainNavigator = createDrawerNavigator({
   Shop: { screen: ShopNavigator },
   Orders: { screen: OrdersNavigator },
-  MyItems: { screen: MyItemsNavigator, navigationOptions: { drawerLabel: 'My Items' } }
+  MyItems: {
+    screen: MyItemsNavigator,
+    navigationOptions: { drawerLabel: 'My Items' },
+  }
 },
   {
     contentOptions: {
-      activeTintColor: Colours.primary
+      activeTintColor: Colours.primary,
     },
     contentComponent: (props) => {
       const dispatch = useDispatch();
       return (
         <View styles={{ flex: 1 }}>
-          <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
+          <SafeAreaView
+            forceInset={{ top: 'always', horizontal: 'never' }}
+            style={{ marginTop: 50 }}
+          >
             <DrawerNavigatorItems {...props} />
             <Button title={'Log Out'} color={Colours.accent} onPress={() => {
               dispatch(logOut());

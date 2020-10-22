@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Colours } from '../constants/Colours';
 import DefaultText from '../components/DefaultText';
-import { addItemToCart, deleteItem } from '../store/actions/shop';
+import { addItemToCart, removeItemFromCart, deleteItem } from '../store/actions/shop';
 import { useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 
 const ItemCard = props => {
-  const { id, title, price, description, imageUrl, ownerId } = props;
+  const { id, title, price, description, imageUrl, ownerId, isItemInCart } = props;
+  const [inCart, setInCart] = useState(isItemInCart);
   const dispatch = useDispatch();
+
   const handleDelete = () => {
     Alert.alert(
       'Delete Item: ' + title,
@@ -24,17 +26,31 @@ const ItemCard = props => {
     );
   }
 
+  const handleCartTap = () => {
+    if (inCart) {
+      dispatch(removeItemFromCart(id))
+    } else {
+      dispatch(addItemToCart(id))
+    }
+    setInCart(prevState => !prevState);
+  }
+
   const renderDetailsRow = () => {
     if (props.mode !== 'shop') {
       return (
         <View style={styles.cardDetails}>
-          <TouchableOpacity onPress={() => props.navigation.navigate({
-            routeName: 'EditItem',
-            params: { item: { id, title, price, description, imageUrl, ownerId } }
-          })}>
+          <TouchableOpacity
+            style={styles.touchableArea}
+            onPress={() => props.navigation.navigate({
+              routeName: 'EditItem',
+              params: { item: { id, title, price, description, imageUrl, ownerId } }
+            })}>
             <Ionicons name={'ios-create'} size={30} color='white' />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleDelete()}>
+          <TouchableOpacity
+            style={styles.touchableArea}
+            onPress={() => handleDelete()}
+          >
             <Ionicons name={'md-trash'} size={30} color='white' />
           </TouchableOpacity>
         </View>
@@ -42,12 +58,18 @@ const ItemCard = props => {
     } else {
       return (
         <View style={styles.cardDetails}>
-          <Ionicons name={'ios-information-circle-outline'} size={30} color='white' />
-          <DefaultText style={styles.price}>£{price}</DefaultText>
-          <TouchableOpacity onPress={() => dispatch(addItemToCart(id))}>
-            <Ionicons name={'ios-cart'} size={30} color='white' />
+          <TouchableOpacity style={styles.touchableArea} onPress={props.onSelect}>
+            <Ionicons name={'ios-information-circle-outline'} size={30} color='white' />
           </TouchableOpacity>
-        </View>
+          <DefaultText style={styles.price}>£{price}</DefaultText>
+          <TouchableOpacity onPress={() => handleCartTap()} style={styles.touchableArea}>
+            <Ionicons
+              name={'ios-cart'}
+              size={30}
+              color={inCart ? Colours.terciary : 'white'}
+            />
+          </TouchableOpacity>
+        </View >
       );
     }
   }
@@ -84,13 +106,14 @@ const styles = StyleSheet.create({
   },
   titleStripe: {
     backgroundColor: 'rgba(0,0,0,0.5)',
-    height: 30,
+    height: 35,
     alignItems: 'center',
     justifyContent: 'center'
   },
   title: {
     color: 'white',
-    fontSize: 16
+    fontFamily: 'open-sans-bold',
+    fontSize: 18
   },
   image: {
     width: '100%',
@@ -102,6 +125,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     color: 'white'
+  },
+  touchableArea: {
+    flexGrow: 1,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   price: {
     fontFamily: 'open-sans-bold',

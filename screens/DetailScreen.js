@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import ButtonHeaderCustom from '../components/ButtonHeaderCustom';
 import ButtonMain from '../components/ButtonMain';
+import { Ionicons } from '@expo/vector-icons';
 import { addItemToCart, removeItemFromCart } from '../store/actions/shop';
 
 const DetailScreen = props => {
@@ -30,13 +31,22 @@ const DetailScreen = props => {
   }
 
   return (
-    <View style={styles.screen}>
-      <Image source={{ uri: selectedItem.imageUrl }} style={styles.image} />
-      <Text style={styles.title}>{selectedItem.title}</Text>
-      <Text style={styles.description}>{selectedItem.description}</Text>
-      <Text style={styles.price}>£{selectedItem.price}</Text>
-      {serveAddRemoveButton()}
-    </View>
+    <ScrollView>
+      <View style={styles.screen}>
+        <Image source={{ uri: selectedItem.imageUrl }} style={styles.image} />
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>{selectedItem.title}</Text>
+        </View>
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.description}>{selectedItem.description}</Text>
+        </View>
+        <View style={styles.priceContainer}>
+          <Ionicons name="md-pricetag" size={24} color="black" />
+          <Text style={styles.price}>£{selectedItem.price}</Text>
+        </View>
+        {serveAddRemoveButton()}
+      </View>
+    </ScrollView>
   );
 }
 
@@ -62,17 +72,34 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300
   },
+  titleContainer: {
+    backgroundColor: 'rgba(0,0,0,0.80)',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   title: {
+    color: 'white',
     fontSize: 20,
     marginVertical: 10
+  },
+  descriptionContainer: {
+    padding: 10
   },
   description: {
-    fontSize: 14,
+    fontSize: 16,
     marginVertical: 10
   },
+  priceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   price: {
-    fontSize: 20,
-    fontWeight: 'bold'
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginHorizontal: 10,
+    marginVertical: 20
   }
 });
 

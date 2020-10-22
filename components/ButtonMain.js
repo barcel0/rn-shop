@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { Colours } from '../constants/Colours';
 
 const ButtonMain = (props) => {
   return (
     <TouchableOpacity onPress={props.onTap}>
-      <View style={{ ...styles.buttonContainer }}>
+      <View style={{ ...styles.buttonContainer, ...props.style }}>
         <Text style={styles.label}>{props.children}</Text>
       </View>
     </TouchableOpacity>
@@ -13,7 +14,8 @@ const ButtonMain = (props) => {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: 'lightblue',
+    backgroundColor: Colours.terciary,
+
     paddingVertical: 10,
     paddingHorizontal: 20,
     justifyContent: 'center',
@@ -23,7 +25,9 @@ const styles = StyleSheet.create({
 
   },
   label: {
-    fontSize: 16
+    color: 'white',
+    fontFamily: 'open-sans-bold',
+    fontSize: 18
   }
 });
 

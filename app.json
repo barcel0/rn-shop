@@ -21,6 +21,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "React Native Shop App. Basic shop app created as udemy course excercise. It involves navigation setup (React Navigation v4), user input, http requests as well as authentication. Existing username legit@email.com with password 123456."
   }
 }

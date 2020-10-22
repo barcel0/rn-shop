@@ -38,4 +38,8 @@ const styles = StyleSheet.create({
   }
 });
 
+AddItemScreen.navigationOptions = {
+  headerTitle: 'Add Item'
+}
+
 export default AddItemScreen;

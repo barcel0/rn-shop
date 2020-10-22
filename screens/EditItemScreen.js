@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateItem, deleteItem } from '../store/actions/shop';
+import { updateItem } from '../store/actions/shop';
 import ItemForm from '../components/ItemForm';
-import ButtonMain from '../components/ButtonMain';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import ButtonHeaderCustom from '../components/ButtonHeaderCustom';
 
 const EditItemScreen = props => {
   const item = props.navigation.getParam('item');
@@ -14,7 +11,7 @@ const EditItemScreen = props => {
   const [description, setDescription] = useState(item.description);
   const [id, setId] = useState(item.id);
   const [price, setPrice] = useState(item.price.toString());
-  const ownerId = useSelector(state => state.shop.userId);
+  const ownerId = useSelector(state => state.auth.userId);
   const dispatch = useDispatch();
 
   const handleSend = () => {
@@ -41,14 +38,7 @@ const EditItemScreen = props => {
 
 EditItemScreen.navigationOptions = navigationData => {
   return {
-    headerTitle: 'Edit Item',
-    headerRight: () => <HeaderButtons HeaderButtonComponent={ButtonHeaderCustom}>
-      <Item
-        title={'Delete Item'}
-        iconName={'md-trash'}
-        onPress={() => console.log('delete')}
-      />
-    </HeaderButtons>
+    headerTitle: 'Edit Item'
   }
 }
 

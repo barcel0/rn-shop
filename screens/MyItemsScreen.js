@@ -1,13 +1,28 @@
-import React from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, StyleSheet, FlatList, Text, ActivityIndicator } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import ButtonHeaderCustom from '../components/ButtonHeaderCustom';
 import ItemCard from '../components/ItemCard';
+import { fetchItems } from '../store/actions/shop';
+import { Colours } from '../constants/Colours';
 
 const MyItemsScreen = props => {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const userId = useSelector(state => state.auth.userId);
-  const userItems = useSelector(state => state.shop.items.filter(item => item.ownerId === userId));
+  const items = useSelector(state => state.shop.items);
+  const userItems = items.filter(item => item.ownerId === userId);
+
+  const loadItems = useCallback(async () => {
+    setIsLoading(true);
+    dispatch(fetchItems());
+    setIsLoading(false);
+  }, [dispatch, setIsLoading]);
+
+  useEffect(() => {
+    loadItems();
+  }, [loadItems, items]);
 
   const serveItemCard = (itemData) => {
     return (
@@ -31,11 +46,19 @@ const MyItemsScreen = props => {
     );
   }
 
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size={'large'} color={Colours.primary} />
+      </View>
+    );
+  }
+
   if (userItems.length < 1) {
     return (
       <View style={{ ...styles.screen, alignItems: 'center' }}>
         <Text>You have no items created.</Text>
-        <Text>Try adding one by tapping the upper left icon.</Text>
+        <Text>Try adding one by tapping the upper right icon.</Text>
       </View>
     );
   }

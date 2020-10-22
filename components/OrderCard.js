@@ -13,11 +13,10 @@ const OrderCard = props => {
     <View style={styles.container}>
 
       <View style={styles.header}>
-        <Text>{props.id}</Text>
-        <Text>{props.date}</Text>
-        <Text>£{props.total}</Text>
+        <Text style={{ fontSize: 16 }}>{props.date}</Text>
+        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>£{props.total}</Text>
         <ButtonMain onTap={() => setIsOpen(!isOpen)}>
-          <Text>See more</Text>
+          <Text>Details</Text>
         </ButtonMain>
       </View>
 
@@ -35,20 +34,20 @@ const OrderCard = props => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'lightpink',
     marginTop: 10,
     borderRadius: 10,
-    overflow: 'hidden'
+    padding: 10,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'lightgrey'
   },
   header: {
-    backgroundColor: 'lightgreen',
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%'
   },
   details: {
-    backgroundColor: 'lightblue',
     width: '100%',
   },
   orderItemHeader: {
@@ -56,8 +55,8 @@ const styles = StyleSheet.create({
   },
   orderItem: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 8
+    justifyContent: 'space-between',
+    paddingVertical: 8,
   }
 });
 

@@ -42,7 +42,7 @@ export const signUp = (email, password) => async dispatch => {
       }
     };
     const resData = await response.json();
-    dispatch(authenticate(resData));
+    dispatch(authenticate(resData.idToken, resData.localId));
     const expiryDate = new Date(new Date().getTime() + (+resData.expirationDate * 1000));
     saveDataToStorage(tokenId, localId, expiryDate);
   } catch (error) {
@@ -80,7 +80,7 @@ export const logIn = (email, password) => async dispatch => {
     const resData = await response.json();
     console.log(resData); //debug
     console.log({ tokenId: resData.idToken, localId: resData.localId }) //debug
-    dispatch(authenticate(resData));
+    dispatch(authenticate(resData.idToken, resData.localId));
     const expiryDate = new Date(new Date().getTime() + (+resData.expiresIn * 1000));
     saveDataToStorage(resData.idToken, resData.localId, expiryDate);
   } catch (error) {
